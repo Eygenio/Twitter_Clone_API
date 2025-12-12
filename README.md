@@ -143,7 +143,7 @@ git clone https://gitlab.skillbox.ru/evgenii_nemchenko_1/python_advanced_diploma
 pip install -r requirements.txt
 ```
 
-## 3. Создать `.env`
+## 3. Создать `.env` или скопируйте содержимое `.env.template` в `.env`
 
 ```
 DB_USER=postgres
