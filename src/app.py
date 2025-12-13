@@ -42,18 +42,11 @@ app.include_router(medias_router)
 
 # создание директории media, если ее нет.
 Config.MEDIA_DIR.mkdir(parents=True, exist_ok=True)
-app.mount(
-    "/media",
-    StaticFiles(directory=Config.MEDIA_DIR),
-    name="media"
-)
 
-# монтирование статических файлов для фронтенда.
-app.mount(
-    "/",
-    StaticFiles(directory=Config.DIST_DIR, html=True),
-    name="static",
-)
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 
 
 if __name__ == "__main__":

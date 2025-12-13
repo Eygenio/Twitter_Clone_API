@@ -1,4 +1,4 @@
-# 🐦 Twitter Clone API — FastAPI + Celery + RabbitMQ + PostgreSQL
+# 🐦 Twitter Clone API — FastAPI + Celery + RabbitMQ + PostgreSQL + Nginx
 
 Высокопроизводительное backend-приложение, реализующее ключевой функционал Twitter: пользователи, посты, лайки, подписки, фоновые задачи.
 
@@ -12,6 +12,7 @@
 * ⚙️ Фоновые задачи Celery (уведомления, обработка задач)
 * 🐇 RabbitMQ в качестве брокера
 *  🗄 PostgreSQL
+* 🌐 Nginx для раздачи статики и проксирования
 * 🐳 Полная поддержка Docker + docker-compose
 * 📡 Swagger UI
 
@@ -26,6 +27,9 @@ app/
  │    └── script.py.mako
  ├── dist/
  ├── media/
+ ├── nginx/
+ │    ├── Dockerfile
+ │    └── nginx.conf
  ├── scripts/
  │    ├── __init__.py
  │    ├── seed_ddb.py
@@ -102,6 +106,7 @@ app/
 * Celery 5
 * RabbitMQ
 * PostgreSQL
+* Nginx
 * Docker + docker-compose
 * JWT Auth
 * Pytest
