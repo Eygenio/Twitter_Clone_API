@@ -28,7 +28,6 @@ app/
  ├── dist/
  ├── media/
  ├── nginx/
- │    ├── Dockerfile
  │    └── nginx.conf
  ├── scripts/
  │    ├── __init__.py
