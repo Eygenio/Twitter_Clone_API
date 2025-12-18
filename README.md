@@ -141,13 +141,7 @@ app/
 git clone https://github.com/Eygenio/Twitter_Clone_API
 ```
 
-## 2. Установить зависимости
-
-```bash
-pip install -r requirements.txt
-```
-
-## 3. Создать `.env` или скопируйте содержимое `.env.template` в `.env`
+## 2. Создать `.env` или скопируйте содержимое `.env.template` в `.env`
 
 ```
 DB_USER=postgres
@@ -161,39 +155,28 @@ RABBIT_USER=guest
 RABBIT_PASSWORD=guest
 ```
 
-## 4. Запуск FastAPI
-
-```bash
-uvicorn src.main:app --reload
-```
-
-## 5. Запуск Celery
-
-```bash
-celery -A src.celery_app.celery_app worker --loglevel=info
-```
-
----
-
-# 🐳 Запуск через Docker
-
-## 1. Сборка
+## 3. 🐳 Сборка через Docker
 
 ```bash
 docker-compose build
 ```
 
-## 2. Запуск
+## 4. 🐳 Запуск через Docker
 
 ```bash
 docker-compose up -d
 ```
 
-
-# 🎯 Тест Celery
+## 🔗 Доступ к сервису
 
 ```bash
-python src/celery_app/send_test_task.py
+http://0.0.0.0:8080/ 
+```
+
+## 🔗 Доступ к документации
+
+```bash
+http://0.0.0.0:8080/docs/
 ```
 
 ---
