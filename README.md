@@ -138,7 +138,7 @@ app/
 ## 1. Клонировать репозиторий
 
 ```bash
-git clone https://gitlab.skillbox.ru/evgenii_nemchenko_1/python_advanced_diploma.git
+git clone https://github.com/Eygenio/Twitter_Clone_API
 ```
 
 ## 2. Установить зависимости
