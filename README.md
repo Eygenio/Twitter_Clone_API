@@ -1,4 +1,4 @@
-# 🐦 Twitter Clone API — FastAPI + Celery + RabbitMQ + PostgreSQL + Nginx
+# 🐦 Twitter Clone API v1.0.0 — FastAPI + Celery + RabbitMQ + PostgreSQL + Nginx
 
 Высокопроизводительное backend-приложение, реализующее ключевой функционал Twitter: пользователи, посты, лайки, подписки, фоновые задачи.
 
