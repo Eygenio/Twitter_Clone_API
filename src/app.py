@@ -19,7 +19,11 @@ from src.routing.medias import medias_router
 logging.config.dictConfig(LOGGING_CONFIG)
 
 # создание основного приложения FastAPI
-app = FastAPI(title="Twitter Clone API")
+app = FastAPI(
+    title="Twitter Clone API",
+    version="1.0.0",
+    description="Public API v1"
+)
 
 # создание таблиц базы данных при старте приложения.
 @app.on_event("startup")
