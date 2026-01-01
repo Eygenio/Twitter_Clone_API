@@ -2,6 +2,9 @@
 
 Высокопроизводительное backend-приложение, реализующее ключевой функционал Twitter: пользователи, посты, лайки, подписки, фоновые задачи.
 
+> ⚠️ Проект реализован **только в части backend**.  
+> Frontend предоставлен готовым и использовался для интеграции и тестирования API.
+
 ---
 
 ## ✨ Возможности
@@ -19,6 +22,9 @@
 ---
 
 ## 🏗️ Архитектура проекта
+
+Архитектура построена по принципу:
+Routing → Service → Repository
 
 ```
 app/
@@ -107,8 +113,10 @@ app/
 * PostgreSQL
 * Nginx
 * Docker + docker-compose
-* JWT Auth
+* API-key authentication (FastAPI dependencies)
 * Pytest
+* SQLAlchemy 2.0 (async)
+* Repository Pattern
 
 ---
 
@@ -186,12 +194,10 @@ http://0.0.0.0:8080/docs/
 ### `users`
 
 * id
-* username
-* email
-* password
-* created_at
+* name
+* api_key
 
-### `posts`
+### `tweets`
 
 * id
 * user_id
@@ -207,47 +213,8 @@ http://0.0.0.0:8080/docs/
 
 # 🔐 Безопасность
 
-* JWT в заголовках
+* Аутентификация через API-key (HTTP Header)
 * PostgreSQL изолирован Docker'ом
 * Минимум привилегий
 
 ---
-
-# 📊 Отчет (coverage)
-
-```
-Name                              Stmts   Miss  Cover
------------------------------------------------------
-src/config/base.py                   13      0   100%
-src/exceptions/db.py                  9      5    44%
-src/exceptions/exceptions.py         19      0   100%
-src/models/__init__.py                7      0   100%
-src/models/base.py                    3      0   100%
-src/models/followers.py               9      0   100%
-src/models/likes.py                  12      0   100%
-src/models/medias.py                  7      0   100%
-src/models/tweets.py                 11      0   100%
-src/models/users.py                  11      0   100%
-src/repositories/base.py             76     59    22%
-src/repositories/followers.py         4      0   100%
-src/repositories/likes.py             4      0   100%
-src/repositories/medias.py            4      0   100%
-src/repositories/tweets.py            4      0   100%
-src/repositories/users.py             4      0   100%
-src/schemas/followers.py              3      0   100%
-src/schemas/likes.py                  8      0   100%
-src/schemas/medias.py                 8      0   100%
-src/schemas/tweets.py                22      0   100%
-src/schemas/users.py                 17      0   100%
-src/services/followers.py            27      7    74%
-src/services/likes.py                32      2    94%
-src/services/medias.py               30      1    97%
-src/services/tweets.py               68     20    71%
-tests/conftest.py                     7      3    57%
-tests/test_followers_service.py      23      0   100%
-tests/test_likes_service.py          48      0   100%
-tests/test_media_service.py          35      0   100%
-tests/test_tweets_service.py         48      0   100%
------------------------------------------------------
-TOTAL                               573     97    83%
-```
