@@ -1,220 +1,192 @@
 # 🐦 Twitter Clone API v1.0.0 — FastAPI + Celery + RabbitMQ + PostgreSQL + Nginx
 
-Высокопроизводительное backend-приложение, реализующее ключевой функционал Twitter: пользователи, посты, лайки, подписки, фоновые задачи.
+High-performance backend application implementing core Twitter functionality:
+users, tweets, likes, follows, and background tasks.
 
-> ⚠️ Проект реализован **только в части backend**.  
-> Frontend предоставлен готовым и использовался для интеграции и тестирования API.
-
----
-
-## ✨ Возможности
-
-* 📝 Создание постов и ленты новостей
-* ❤️ Лайки и статистика постов
-* 🔔 Подписки (followers / following)
-* ⚙️ Фоновые задачи Celery (уведомления, обработка задач)
-* 🐇 RabbitMQ в качестве брокера
-*  🗄 PostgreSQL
-* 🌐 Nginx для раздачи статики и проксирования
-* 🐳 Полная поддержка Docker + docker-compose
-* 📡 Swagger UI
+> ⚠️ The project implements the **backend only**.
+> The frontend is provided as a ready-made package and is used for integration and API testing.
 
 ---
 
-## 🏗️ Архитектура проекта
+## ✨ Features
 
-Архитектура построена по принципу:
-Routing → Service → Repository
+* 📝 Create tweets and browse the feed
+* ❤️ Like/unlike tweets with like statistics
+* 🔔 Follow / unfollow users
+* ⚙️ Celery background tasks (notifications, test tasks)
+* 🐇 RabbitMQ as a message broker
+*  🗄 PostgreSQL database
+* 🌐 Nginx for static file serving and reverse proxying
+* 🐳 Full Docker & docker-compose support
+* 📡 Interactive API documentation (Swagger UI / ReDoc)
+* 🧪 Automated tests (unit, integration, e2e)
+* 🧹 Code quality tools: `ruff`, `mypy`, `pre-commit`
+* 📦 Dependency management with `poetry`
+* 📝 Structured logging with `colorlog`
+
+---
+
+## 🏗️ Architecture
+
+The application follows **Clean Architecture** principles with clear layer separation:
+
+* **Domain** – pure business entities and abstract repository interfaces
+* **Application** – service layer with business logic
+* **Infrastructure** – SQLAlchemy ORM models, repository implementations, and Unit of Work
+* **Presentation** – FastAPI routers, Pydantic schemas, and dependencies
 
 ```
-app/
- ├── alembic/
- │    ├── env.py
- │    └── script.py.mako
- ├── dist/
- ├── media/
- ├── nginx/
- │    └── nginx.conf
- ├── scripts/
- │    ├── __init__.py
- │    ├── seed_ddb.py
- │    ├── send_test_task.py
- │    └── wait-for-db.sh
- ├── src/
- │    ├── config/
- │    │    ├── base.py
- │    │    └── logging_config.py
- │    ├── db
- │    │    └── db.py
- │    ├── exceptions/
- │    │    ├── db.py
- │    │    └── exceptions.py
- │    ├── middleware/
- │    │    ├── error_handler.py
- │    │    └── request_id.py
- │    ├── models/
- │    │    ├── __init__.py
- │    │    ├── base.py
- │    │    ├── followers.py
- │    │    ├── likes.py
- │    │    ├── medias.py
- │    │    ├── tweets.py
- │    │    └── users.py
- │    ├── repositories/
- │    │    ├── base.py
- │    │    ├── followers.py
- │    │    ├── likes.py
- │    │    ├── medias.py
- │    │    ├── tweets.py
- │    │    └── users.py
- │    ├── routing/
- │    │    ├── followers.py
- │    │    ├── likes.py
- │    │    ├── medias.py
- │    │    ├── tweets.py
- │    │    └── users.py
- │    ├── schemas/
- │    │    ├── followers.py
- │    │    ├── likes.py
- │    │    ├── medias.py
- │    │    ├── tweets.py
- │    │    └── users.py
- │    ├── services/
- │    │    ├── followers.py
- │    │    ├── likes.py
- │    │    ├── medias.py
- │    │    ├── tweets.py
- │    │    └── users.py
- │    ├── tasks/
- │    │    └── notifications.py
- │    ├── app.py
- │    ├── celery_app.py
- │    └── dependencies.py
- ├── tests/
- │    ├── conftest.py
- │    ├── test_followers_service.py
- │    ├── test_likes_service.py
- │    ├── test_media_service.py
- │    └── test_tweets_service.py
- ├── .env
- ├── alembic.ini
- ├── docker-compose.yml
- ├── Dockerfile
- ├── pytest.ini
- ├── README.md
- └── requirements.txt
+project/
+├── src/
+│ ├── application/
+│ │ └── services/ # Business logic
+│ ├── domain/
+│ │ ├── entities.py # Pydantic domain models
+│ │ ├── repositories.py # Abstract repository interfaces
+│ │ └── unit_of_work.py # Abstract Unit of Work
+│ ├── infrastructure/
+│ │ ├── models/ # SQLAlchemy ORM models
+│ │ ├── repositories/ # Repository implementations
+│ │ └── unit_of_work.py # Concrete Unit of Work
+│ ├── presentation/
+│ │ ├── api/ # FastAPI routers
+│ │ ├── schemas/ # Pydantic request/response schemas
+│ │ └── dependencies.py # FastAPI dependencies (including UoW injection)
+│ ├── config/ # Application settings (Pydantic-settings)
+│ ├── db/ # Database engine and session factory
+│ ├── middleware/ # Custom middleware (Request-ID, error handlers)
+│ ├── exceptions/ # Custom application exceptions
+│ ├── tasks/ # Celery tasks
+│ ├── app.py # FastAPI application entry point
+│ └── celery_app.py # Celery application configuration
+├── tests/
+│ ├── conftest.py # Shared fixtures and test configuration
+│ ├── e2e/ # End-to-end API tests
+│ ├── integration/ # Integration API tests
+│ └── unit/ # Unit tests for services and domain logic
+├── alembic/ # Database migrations
+├── scripts/ # Helper scripts (seed DB, send test tasks, wait-for-db)
+├── nginx/ # Nginx configuration
+├── docker-compose.yaml
+├── Dockerfile
+├── pyproject.toml # Poetry dependencies and tool configuration
+├── .pre-commit-config.yaml # Pre-commit hooks
+└── README.md
 ```
 
-Технологии:
+## 🧰 Technology Stack
 
-* FastAPI
-* Celery 5
-* RabbitMQ
-* PostgreSQL
-* Nginx
-* Docker + docker-compose
-* API-key authentication (FastAPI dependencies)
-* Pytest
-* SQLAlchemy 2.0 (async)
-* Repository Pattern
-
----
-
-## 💡 Функциональность
-
-### 👤 Пользователи
-
-* профиль
-* подписки / отписки
-
-### 📝 Посты
-
-* создание
-* получение
-* лента
-* лайки
-
-### ⚙️ Celery-задачи
-
-* отправка уведомлений
-* тестовые задачи (send_test_task.py)
+* **Python** 3.13
+* **FastAPI**
+* **Celery**
+* **RabbitMQ**
+* **PostgreSQL**
+* **SQLAlchemy 2.0**
+* **Pydantic**
+* **Alembic**
+* **Nginx**
+* **Docker** & **docker-compose**
+* **Poetry**
+* **Pytest**
+* **Ruff / MyPy / Pre-commit**
 
 ---
 
-# 🚀 Запуск проекта (локально)
+## 💡 Functionality
 
-## 1. Клонировать репозиторий
+### 👤 Users
+
+* User profile with followers / following
+* API‑key authentication
+
+### 📝 Tweets
+
+* Create, view, and delete tweets
+* Media attachments
+* Like / unlike tweets
+
+### ⚙️ Background tasks (Celery)
+
+* Send follow notifications (demo logging)
+* Test tasks for worker health check
+
+---
+
+# 🚀 Getting Started
+
+## 1. Clone the repository
 
 ```bash
 git clone https://github.com/Eygenio/Twitter_Clone_API
 ```
 
-## 2. Создать `.env` или скопируйте содержимое `.env.template` в `.env`
+## 2. Create a `.env` file (or copy from the provided template):
 
 ```
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=database
-CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
-CELERY_RESULT_BACKEND=rpc://
-RABBIT_USER=guest
-RABBIT_PASSWORD=guest
+APP__HOST=
+APP__PORT=
+
+DB__NAME=
+DB__USER=
+DB__PASSWORD=
+DB__HOST=
+DB__PORT=
+DB__DRIVER_NAME=
+
+BROKER__URL=
+BROKER__RESULT_BACKEND=
+
+POOL__ECHO=
+POOL__POOL_PRE_PING=
+POOL__POOL_SIZE=
+POOL__MAX_OVERFLOW=
+
+RABBIT_USER=
+RABBIT_PASSWORD=
+
 ```
 
-## 3. 🐳 Сборка через Docker
+## 3. 🐳 Build & run with Docker
 
 ```bash
 docker-compose build
-```
-
-## 4. 🐳 Запуск через Docker
-
-```bash
 docker-compose up -d
 ```
+The application will be available at `http://0.0.0.0:8080/`.
+Interactive API docs: `http://0.0.0.0:8080/docs/`.
 
-## 🔗 Доступ к сервису
+## 🧪 Testing
 
-```bash
-http://0.0.0.0:8080/ 
-```
-
-## 🔗 Доступ к документации
+Run all tests (unit, integration, e2e):
 
 ```bash
-http://0.0.0.0:8080/docs/
+docker-compose exec app pytest -v
 ```
 
----
+## 🧹 Code Quality
 
-# 📦 Структура PostgreSQL
+All code quality tools are configured in `pyproject.toml` and `.pre-commit-config.yaml`.
 
-### `users`
+```bash
+# Formatting and linting
+ruff check . --fix
+ruff format .
 
-* id
-* name
-* api_key
+# Import sorting
+isort .
 
-### `tweets`
+# Type checking
+mypy src
+```
 
-* id
-* user_id
-* content
-* created_at
+Pre-commit hooks run automatically on `git commit`.
 
-### `followers`
 
-* follower_id
-* following_id
+## 🔐 Security
 
----
-
-# 🔐 Безопасность
-
-* Аутентификация через API-key (HTTP Header)
-* PostgreSQL изолирован Docker'ом
-* Минимум привилегий
+* API‑key authentication via custom HTTP header
+* PostgreSQL isolated within Docker network
+* Custom exception handlers with request‑ID tracking
+* Minimal privilege principle
 
 ---

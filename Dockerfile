@@ -1,13 +1,15 @@
-FROM python:3.13
+FROM python:3.13-slim
+
+RUN apt-get update && apt-get install -y build-essential gcc git postgresql-client curl --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PATH="/root/.local/bin:$PATH"
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y build-essential gcc git postgresql-client --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+COPY pyproject.toml poetry.lock ./
+RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi --no-root
 
 COPY . .
 
@@ -17,3 +19,6 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONFAULTHANDLER=1
 ENV PYTHONPATH="/app"
 ENV PYTHONDONTWRITEBYTECODE=1
+
+EXPOSE 8000
+CMD ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "8000"]

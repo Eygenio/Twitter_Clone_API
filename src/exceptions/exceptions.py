@@ -1,9 +1,8 @@
 from fastapi import status
 
 
-class AppException(Exception):
-    """Базовый класс для ошибок серверного уровня."""
-    error_type: str = "AppException"
+class AppExceptionError(Exception):
+    error_type: str = "AppExceptionError"
     status_code: int = status.HTTP_400_BAD_REQUEST
 
     def __init__(self, message: str):
@@ -11,21 +10,21 @@ class AppException(Exception):
         super().__init__(message)
 
 
-class NotFoundError(AppException):
+class NotFoundError(AppExceptionError):
     error_type = "NotFoundError"
     status_code = status.HTTP_404_NOT_FOUND
 
 
-class PermissionDeniedError(AppException):
+class PermissionDeniedError(AppExceptionError):
     error_type = "PermissionDeniedError"
     status_code = status.HTTP_403_FORBIDDEN
 
 
-class AlreadyExistsError(AppException):
+class AlreadyExistsError(AppExceptionError):
     error_type = "AlreadyExistError"
     status_code = status.HTTP_409_CONFLICT
 
 
-class ValidationError(AppException):
+class ValidationError(AppExceptionError):
     error_type = "ValidationError"
     status_code = status.HTTP_422_UNPROCESSABLE_CONTENT

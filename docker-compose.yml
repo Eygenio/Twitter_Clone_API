@@ -3,9 +3,9 @@ services:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-database}
+      POSTGRES_USER: ${DB__USER:-postgres}
+      POSTGRES_PASSWORD: ${DB__PASSWORD:-postgres}
+      POSTGRES_DB: ${DB__NAME:-database}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -42,13 +42,13 @@ services:
         condition: service_healthy
     environment:
       PYTHONPATH: /app
-      DB_USER: ${DB_USER:-postgres}
-      DB_PASSWORD: ${DB_PASSWORD:-postgres}
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: ${DB_NAME:-database}
-      CELERY_BROKER_URL: amqp://${RABBIT_USER:-guest}:${RABBIT_PASSWORD:-guest}@rabbitmq:5672//
-      CELERY_RESULT_BACKEND: rpc://
+      DB__USER: ${DB__USER:-postgres}
+      DB__PASSWORD: ${DB__PASSWORD:-postgres}
+      DB__HOST: postgres
+      DB__PORT: 5432
+      DB__NAME: ${DB__NAME:-database}
+      BROKER__URL: amqp://${RABBIT_USER:-guest}:${RABBIT_PASSWORD:-guest}@rabbitmq:5672//
+      BROKER__RESULT_BACKEND: rpc://
     volumes:
       - ./media:/app/media
     networks:
@@ -81,13 +81,13 @@ services:
         condition: service_healthy
     environment:
       PYTHONPATH: /app
-      DB_USER: ${DB_USER:-postgres}
-      DB_PASSWORD: ${DB_PASSWORD:-postgres}
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: ${DB_NAME:-database}
-      CELERY_BROKER_URL: amqp://${RABBIT_USER:-guest}:${RABBIT_PASSWORD:-guest}@rabbitmq:5672//
-      CELERY_RESULT_BACKEND: rpc://
+      DB__USER: ${DB__USER:-postgres}
+      DB__PASSWORD: ${DB__PASSWORD:-postgres}
+      DB__HOST: postgres
+      DB__PORT: 5432
+      DB__NAME: ${DB__NAME:-database}
+      BROKER__URL: amqp://${RABBIT_USER:-guest}:${RABBIT_PASSWORD:-guest}@rabbitmq:5672//
+      BROKER__RESULT_BACKEND: rpc://
     volumes:
       - ./media:/app/media
     networks:
@@ -102,11 +102,11 @@ services:
       - app
     environment:
       PYTHONPATH: /app
-      DB_USER: ${DB_USER:-postgres}
-      DB_PASSWORD: ${DB_PASSWORD:-postgres}
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: ${DB_NAME:-database}
+      DB__USER: ${DB__USER:-postgres}
+      DB__PASSWORD: ${DB__PASSWORD:-postgres}
+      DB__HOST: postgres
+      DB__PORT: 5432
+      DB__NAME: ${DB__NAME:-database}
     volumes:
       - ./media:/app/media
     networks:
@@ -124,8 +124,8 @@ services:
         condition: service_started
     environment:
       PYTHONPATH: /app
-      CELERY_BROKER_URL: amqp://${RABBIT_USER:-guest}:${RABBIT_PASSWORD:-guest}@rabbitmq:5672//
-      CELERY_RESULT_BACKEND: rpc://
+      BROKER__URL: amqp://${RABBIT_USER:-guest}:${RABBIT_PASSWORD:-guest}@rabbitmq:5672//
+      BROKER__RESULT_BACKEND: rpc://
     networks:
       - backend
     command: >
