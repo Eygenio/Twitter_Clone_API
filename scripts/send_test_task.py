@@ -1,9 +1,6 @@
-"""
-Скрипт отправки тестовых задач в celery broker.
-Запуск: scripts/send_test_task.py
-"""
-from src.celery_app import celery_app
 import time
+
+from src.celery_app import celery_app
 
 
 def send_task():

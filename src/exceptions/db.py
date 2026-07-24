@@ -1,9 +1,10 @@
 from asyncpg import UniqueViolationError
 from sqlalchemy.exc import IntegrityError
+
 from src.exceptions.exceptions import AlreadyExistsError, ValidationError
 
 
-def handle_db_error(exc: Exception):
+def handle_db_error(exc: Exception) -> None:
     if isinstance(exc, UniqueViolationError):
         raise AlreadyExistsError("Unique constraint violated")
 
